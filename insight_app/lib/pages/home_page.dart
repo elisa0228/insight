@@ -10,6 +10,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<CameraDescription> cameras = [];
+  CameraController? cameraController;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupCameraController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +28,13 @@ class _HomePageState extends State<HomePage> {
     if (_cameras.isNotEmpty) {
       setState(() {
         cameras = _cameras;
+        cameraController = CameraController(
+          _cameras.first,
+          ResolutionPreset.high,
+        );
+      });
+      cameraController?.initialize().then((_) {
+        setState(() {});
       });
     }
   }
