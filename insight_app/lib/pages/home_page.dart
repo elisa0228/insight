@@ -9,6 +9,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<CameraDescription> cameras = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold();
@@ -16,6 +18,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _setupCameraController() async {
     List<CameraDescription> _cameras = await availableCameras();
-    if (_cameras.isNotEmpty) {}
+    if (_cameras.isNotEmpty) {
+      setState(() {
+        cameras = _cameras;
+      });
+    }
   }
 }
