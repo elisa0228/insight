@@ -20,7 +20,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(body: _buildUI());
+  }
+
+  Widget _buildUI() {
+    if (cameraController == null ||
+        cameraController?.value.isInitialized == false) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return SafeArea(child: SizedBox.expand());
   }
 
   Future<void> _setupCameraController() async {
