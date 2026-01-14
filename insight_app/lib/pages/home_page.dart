@@ -33,7 +33,18 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [CameraPreview(cameraController!)],
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.30,
+              width: MediaQuery.sizeOf(context).width * 0.80,
+              child: CameraPreview(cameraController!),
+            ),
+            IconButton(
+              onPressed: () {},
+              iconSize: 100,
+              icon: const Icon(Icons.camera, color: Colors.red),
+            ),
+          ],
         ),
       ),
     );
