@@ -28,7 +28,15 @@ class _HomePageState extends State<HomePage> {
         cameraController?.value.isInitialized == false) {
       return const Center(child: CircularProgressIndicator());
     }
-    return SafeArea(child: SizedBox.expand());
+    return SafeArea(
+      child: SizedBox.expand(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [CameraPreview(cameraController!)],
+        ),
+      ),
+    );
   }
 
   Future<void> _setupCameraController() async {
