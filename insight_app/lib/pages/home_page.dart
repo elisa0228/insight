@@ -36,7 +36,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildUI());
+    return Scaffold(
+      appBar: AppBar(title: const Text("Detect Picture")),
+      body: _buildUI(),
+    );
   }
 
   Widget _buildUI() {
@@ -51,8 +54,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.30,
-              width: MediaQuery.sizeOf(context).width * 0.80,
+              height: MediaQuery.sizeOf(context).height - 250,
+              width: MediaQuery.sizeOf(context).width,
               child: CameraPreview(cameraController!),
             ),
             IconButton(
