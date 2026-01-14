@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         cameras = _cameras;
         cameraController = CameraController(
-          _cameras.first,
+          _cameras.last,
           ResolutionPreset.high,
         );
       });
