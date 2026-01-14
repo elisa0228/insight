@@ -40,7 +40,9 @@ class _HomePageState extends State<HomePage> {
               child: CameraPreview(cameraController!),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                XFile picture = await cameraController!.takePicture();
+              },
               iconSize: 100,
               icon: const Icon(Icons.camera, color: Colors.red),
             ),
