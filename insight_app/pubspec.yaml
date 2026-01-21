@@ -34,8 +34,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8 
-  camera: ^0.11.3 #access to device camera
-  gal: ^2.3.2 #plugin for saving image to photo gallery
+  camera: ^0.11.3 # paxkage to access to device camera
+  gal: ^2.3.2 # package plugin for saving image to photo gallery
+  dash_chat_2: ^0.0.21 # package for building chat UI
+  flutter_gemini: ^3.0.0 # package for using with google gemini chat
+  image_picker: ^1.2.1 # package for picking image from gallery
 
 dev_dependencies:
   flutter_test:
