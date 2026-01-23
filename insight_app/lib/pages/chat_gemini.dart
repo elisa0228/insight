@@ -1,3 +1,4 @@
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart'; //
 
 class HomePage extends StatefulWidget {
@@ -10,6 +11,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Chat Gemini')));
+    return Scaffold(
+      appBar: AppBar(title: Text('Chat Gemini')),
+      body: _buildChatUi(),
+    );
+  }
+
+  Widget _buildChatUi() {
+    return DashChat(currentUser: currentUser, onSend: () {}, messages: []);
   }
 }
