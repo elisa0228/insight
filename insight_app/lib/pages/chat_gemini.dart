@@ -14,21 +14,25 @@ class _HomePageState extends State<HomePage> {
   List<ChatMessage> messages = [];
   ChatUser currentUser = ChatUser(id: "0", firstName: "CurrentUser");
   ChatUser chatGemini = ChatUser(id: "1", firstName: "GeminiChat");
-  void _onSend(ChatMessage message) {
+  void _onSend(ChatMessage chatMessage) {
     setState(() {
-      messages.add(message);
+      messages = [chatMessage, ...messages];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat Gemini')),
+      appBar: AppBar(title: Text('Chat Gemini'), centerTitle: true),
       body: _buildChatUi(),
     );
   }
 
   Widget _buildChatUi() {
-    return DashChat(currentUser: currentUser, onSend: _onSend, messages: []);
+    return DashChat(
+      currentUser: currentUser,
+      onSend: _onSend,
+      messages: messages,
+    );
   }
 }
