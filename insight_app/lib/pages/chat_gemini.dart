@@ -18,6 +18,25 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       messages = [chatMessage, ...messages];
     });
+    try {
+      String question = chatMessage.text;
+      gemini.streamGenerateContent(question).listen((event) {
+        ChatMessage? lastMessage = messages.firstOrNull;
+        if (lastMessage != null && lastMessage.user.id == chatGemini.id) {
+          lastMessage == messages.removeAt(0);
+          String response =
+              event.content?.parts?.fold(
+                "",
+                (previousValue, current) => "$previousValue${current.text}",
+              ) ??
+              "";
+          lastMessage.text += response;
+          setState(() {
+            messages = [lastMessage, ...messages];
+          });
+        }
+      });
+    } catch (e) {}
   }
 
   @override
