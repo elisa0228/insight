@@ -5,7 +5,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>access the library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>required for ios 14 or saving to album</string>
+	<string>photo library access warning required for ios 14 or saving to album</string>
 	<key>NSCameraUsageDescription</key>
 	<string>access to the camera</string>
 	<key>NSMicrophoneUsageDescription</key>
