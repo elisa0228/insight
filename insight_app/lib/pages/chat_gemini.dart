@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -21,7 +24,11 @@ class _HomePageState extends State<HomePage> {
     });
     try {
       String question = chatMessage.text;
-      gemini.streamGenerateContent(question).listen((event) {
+      List<Uint8List>? images;
+      if (chatMessage.medias?.isNotEmpty ?? false) {
+        images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
+      }
+      gemini.streamGenerateContent(question, images: images).listen((event) {
         ChatMessage? lastMessage = messages.firstOrNull;
         if (lastMessage != null && lastMessage.user.id == chatGemini.id) {
           lastMessage == messages.removeAt(0);
