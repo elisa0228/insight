@@ -1,6 +1,7 @@
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gemini/flutter_gemini.dart'; //
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:image_picker/image_picker.dart'; //
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -55,7 +56,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _sendImageMessage() {
-    print("Send Image Message");
+    ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
+      if (image != null) {
+        ChatMessage chatMessage = ChatMessage(
+          text: "Tell me about this image",
+          user: currentUser,
+          createdAt: DateTime.now(),
+          medias: [
+            ChatMedia(url: image.path, fileName: "", type: MediaType.image),
+          ],
+        );
+        _onSend(chatMessage);
+      }
+    });
   }
 
   @override
