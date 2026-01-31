@@ -34,6 +34,21 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             messages = [lastMessage, ...messages];
           });
+        } else {
+          String response =
+              event.content?.parts?.fold(
+                "",
+                (previousValue, current) => "$previousValue${current.text}",
+              ) ??
+              "";
+          ChatMessage responseMessage = ChatMessage(
+            text: response,
+            user: chatMessage,
+            createdAt: DateTime.now(),
+          );
+          setState(() {
+            messages = [responseMessage, ...messages];
+          });
         }
       });
     } catch (e) {}
