@@ -54,6 +54,10 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {}
   }
 
+  void _sendImageMessage() {
+    print("Send Image Message");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +68,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildChatUi() {
     return DashChat(
+      inputOptions: InputOptions(
+        trailing: [
+          IconButton(onPressed: _sendImageMessage, icon: Icon(Icons.image)),
+        ],
+      ),
       currentUser: currentUser,
       onSend: _onSend,
       messages: messages,
