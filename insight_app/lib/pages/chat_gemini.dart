@@ -47,18 +47,26 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       messages = [chatMessage, ...messages];
     });
     try {
-      String question = chatMessage.text;
-      List<Uint8List>? images = null;
+      final question = chatMessage.text;
+      List<Uint8List>? images;
       if (chatMessage.medias?.isNotEmpty ?? false) {
         images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
       }
       gemini.streamGenerateContent(question, images: images).listen((event) {
         ChatMessage? lastMessage = messages.firstOrNull;
         String response = "";
-        if (event.content != null) {
-          for (final part in event.content!.parts ?? []) {
-            if (part.text != null) {
-              response += part.text!;
+        if (event.content?.parts != null) {
+          for (final part in event.content!.parts!) {
+            if (part is TextPart) {
+              final text = part.text;
+              if (text.isNotEmpty) {
+                if (response.isNotEmpty &&
+                    !response.endsWith(' ') &&
+                    !text.startsWith(' ')) {
+                  response += ' ';
+                }
+                response += text;
+              }
             }
           }
         }
@@ -66,14 +74,17 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           return;
         }
         if (lastMessage != null && lastMessage.user.id == chatGemini.id) {
-          lastMessage == messages.removeAt(0);
+          lastMessage = messages.removeAt(0);
+          if (!lastMessage.text.endsWith(' ') && !response.startsWith(' ')) {
+            lastMessage.text += ' ';
+          }
           lastMessage.text += response;
 
           setState(() {
-            messages = [lastMessage, ...messages];
+            messages = [lastMessage!, ...messages];
           });
         } else {
-          ChatMessage responseMessage = ChatMessage(
+          final responseMessage = ChatMessage(
             text: response,
             user: chatGemini,
             createdAt: DateTime.now(),
@@ -83,7 +94,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           });
         }
       });
-    } catch (e) {}
+    } catch (e, stack) {
+      print("Gemini error: $e");
+      print(stack);
+    }
   }
 
   void _sendImageMessage() {
