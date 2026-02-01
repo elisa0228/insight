@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:insight_app/pages/constant.dart';
-import 'pages/camera_picture.dart'; //import my camera code
+import 'package:insight_app/pages/menu_page.dart';
 
 void main() {
   Gemini.init(apiKey: GEMINI_API_KEY);
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomePage(),
+      home: const MenuPage(),
     );
   }
 }
