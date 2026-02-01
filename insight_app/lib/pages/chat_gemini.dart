@@ -38,6 +38,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           ),
         ],
       );
+      _onSend(chatMessage);
     }
   }
 
