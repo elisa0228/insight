@@ -3,16 +3,16 @@ import 'package:flutter/material.dart'; //imports core flutter matieral UI compo
 import 'package:gal/gal.dart'; //imports the gallery plugin to save images to the device gallery
 
 //homepage widget represents the main screen of the application
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CameraPage extends StatefulWidget {
+  const CameraPage({super.key});
 
   //creates the mutable state for this widget
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CameraPage> createState() => _CameraPageState();
 }
 
 //state the class that manages camera lifecycle (started, paused, resumed) and UI updates
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   List<CameraDescription> cameras =
       []; //stores all available cameras on the device
   CameraController?

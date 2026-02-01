@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:image_picker/image_picker.dart'; //
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ChatGeminiPage extends StatefulWidget {
+  final String? initialImagePath;
+
+  const ChatGeminiPage({super.key, this.initialImagePath});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ChatGeminiPage> createState() => _ChatGeminiPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final Gemini gemini = Gemini.instance;
   List<ChatMessage> messages = [];
   ChatUser currentUser = ChatUser(id: "0", firstName: "CurrentUser");
