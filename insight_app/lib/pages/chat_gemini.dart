@@ -54,15 +54,18 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       }
       gemini.streamGenerateContent(question, images: images).listen((event) {
         ChatMessage? lastMessage = messages.firstOrNull;
+        String response = "";
+        if (event.content != null) {
+          for (final part in event.content!.parts ?? []) {
+            if (part.text != null) {
+              response += part.text!;
+            }
+          }
+        }
         if (lastMessage != null && lastMessage.user.id == chatGemini.id) {
           lastMessage == messages.removeAt(0);
-          String response =
-              event.content?.parts?.fold(
-                "",
-                (previousValue, current) => "$previousValue${current.text}",
-              ) ??
-              "";
           lastMessage.text += response;
+
           setState(() {
             messages = [lastMessage, ...messages];
           });
