@@ -75,7 +75,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
               "";
           ChatMessage responseMessage = ChatMessage(
             text: response,
-            user: chatMessage,
+            user: chatGemini,
             createdAt: DateTime.now(),
           );
           setState(() {
@@ -122,4 +122,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       messages: messages,
     );
   }
+}
+
+extension on Part {
+  get text => null;
 }
