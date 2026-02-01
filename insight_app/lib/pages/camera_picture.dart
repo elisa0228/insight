@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart'; //imports the flutter camera plugin for accessing the device camera
 import 'package:flutter/material.dart'; //imports core flutter matieral UI components
 import 'package:gal/gal.dart'; //imports the gallery plugin to save images to the device gallery
+import 'chat_gemini.dart'; //imports the llm function
 
 //homepage widget represents the main screen of the application
 class CameraPage extends StatefulWidget {
@@ -89,6 +90,14 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 XFile picture = await cameraController!.takePicture();
                 //saves the captures image to the device gallery
                 Gal.putImage(picture.path);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        ChatGeminiPage(initialImagePath: picture.path),
+                  ),
+                );
               },
               //sets the icon size
               iconSize: 100,
