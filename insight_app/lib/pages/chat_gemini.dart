@@ -27,7 +27,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     //if an image was passed from the camera page, automatically send it to gemini with a default prompt
     if (widget.initialImagePath != null) {
       final chatMessage = ChatMessage(
-        text: "Tell me about this image",
+        text: "Describe this image please in detail",
         user: currentUser,
         createdAt: DateTime.now(),
         medias: [
@@ -48,7 +48,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     });
     try {
       String question = chatMessage.text;
-      List<Uint8List>? images;
+      List<Uint8List>? images = null;
       if (chatMessage.medias?.isNotEmpty ?? false) {
         images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
       }
@@ -62,6 +62,9 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
             }
           }
         }
+        if (response.trim().isEmpty) {
+          return;
+        }
         if (lastMessage != null && lastMessage.user.id == chatGemini.id) {
           lastMessage == messages.removeAt(0);
           lastMessage.text += response;
@@ -70,12 +73,6 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
             messages = [lastMessage, ...messages];
           });
         } else {
-          String response =
-              event.content?.parts?.fold(
-                "",
-                (previousValue, current) => "$previousValue${current.text}",
-              ) ??
-              "";
           ChatMessage responseMessage = ChatMessage(
             text: response,
             user: chatGemini,
@@ -93,7 +90,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
       if (image != null) {
         ChatMessage chatMessage = ChatMessage(
-          text: "Tell me about this image",
+          text: "Describe this image please in detail",
           user: currentUser,
           createdAt: DateTime.now(),
           medias: [
@@ -125,8 +122,4 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       messages: messages,
     );
   }
-}
-
-extension on Part {
-  get text => null;
 }
