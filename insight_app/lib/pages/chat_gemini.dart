@@ -20,6 +20,27 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   List<ChatMessage> messages = [];
   ChatUser currentUser = ChatUser(id: "0", firstName: "CurrentUser");
   ChatUser chatGemini = ChatUser(id: "1", firstName: "GeminiChat");
+
+  @override
+  void initState() {
+    super.initState();
+    //if an image was passed from the camera page, automatically send it to gemini with a default prompt
+    if (widget.initialImagePath != null) {
+      final chatMessage = ChatMessage(
+        text: "Tell me about this image",
+        user: currentUser,
+        createdAt: DateTime.now(),
+        medias: [
+          ChatMedia(
+            url: widget.initialImagePath!,
+            fileName: "",
+            type: MediaType.image,
+          ),
+        ],
+      );
+    }
+  }
+
   void _onSend(ChatMessage chatMessage) {
     setState(() {
       messages = [chatMessage, ...messages];
