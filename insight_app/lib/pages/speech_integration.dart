@@ -9,8 +9,7 @@ class SpeechIntegration extends StatefulWidget {
 }
 
 class _SpeechIntegrationState extends State<SpeechIntegration> {
-
-  FlutterTts _flutterTts
+  FlutterTts _flutterTts = FlutterTts();
 
   @override
   void initState() {
@@ -18,7 +17,14 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
     initTTS();
   }
 
-  void initTTS() {}
+  void initTTS() {
+    //returns a dynamic feature (a list of maps)
+    _flutterTts.getVoices.then((data) {
+      try {} catch (e) {
+        print(e); //print so it doesn't crash the application
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
