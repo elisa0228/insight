@@ -39,6 +39,7 @@ dependencies:
   dash_chat_2: ^0.0.21 # package for building chat UI
   flutter_gemini: ^3.0.0 # package for using with google gemini chat
   image_picker: ^1.2.1 # package for picking image from gallery
+  flutter_tts: ^4.2.5 # package to integrate text-to-speech
 
 dev_dependencies:
   flutter_test:
