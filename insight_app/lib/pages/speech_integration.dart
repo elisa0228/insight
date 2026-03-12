@@ -11,6 +11,8 @@ class SpeechIntegration extends StatefulWidget {
 class _SpeechIntegrationState extends State<SpeechIntegration> {
   FlutterTts _flutterTts = FlutterTts();
 
+  Map? _currentVoice;
+
   @override
   void initState() {
     super.initState();
@@ -20,7 +22,14 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
   void initTTS() {
     //returns a dynamic feature (a list of maps)
     _flutterTts.getVoices.then((data) {
-      try {} catch (e) {
+      try {
+        List<Map> _voices = List<Map>.from(data);
+        _voices = _voices
+            .where((_voice) => _voice["name"].contains("en"))
+            .toList();
+        print(_voices);
+        setState(() {});
+      } catch (e) {
         print(e); //print so it doesn't crash the application
       }
     });
