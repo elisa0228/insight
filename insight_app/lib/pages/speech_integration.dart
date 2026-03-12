@@ -9,6 +9,14 @@ class SpeechIntegration extends StatefulWidget {
 
 class _SpeechIntegrationState extends State<SpeechIntegration> {
   @override
+  void initState() {
+    super.initState();
+    initTTS();
+  }
+
+  void initTTS() {}
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold();
   }
