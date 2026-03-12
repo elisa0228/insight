@@ -27,12 +27,18 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
         _voices = _voices
             .where((_voice) => _voice["name"].contains("en"))
             .toList();
-        print(_voices);
-        setState(() {});
+        setState(() {
+          _currentVoice == _voices.first;
+          setVoice(_currentVoice!);
+        });
       } catch (e) {
         print(e); //print so it doesn't crash the application
       }
     });
+  }
+
+  void setVoice(Map voice) {
+    _flutterTts.setVoice({"name": voice["name"], "locale": voice["locale"]});
   }
 
   @override
