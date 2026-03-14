@@ -15,6 +15,8 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
   List<Map> _voices = [];
   Map? _currentVoice;
 
+  int? _currentWordStart, _currentWordEnd;
+
   @override
   void initState() {
     super.initState();
@@ -22,6 +24,12 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
   }
 
   void initTTS() {
+    _flutterTts.setProgressHandler((text, start, end, word) {
+      setState(() {
+        _currentWordStart = start;
+        _currentWordEnd = end;
+      });
+    });
     //returns a dynamic feature (a list of maps)
     _flutterTts.getVoices.then((data) {
       try {
@@ -65,6 +73,7 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
         children: [
           _speakerSelector(),
           RichText(
+            //allows us to implement other textspans within it and for each textspan I can define the styling I want to have for that textspan
             textAlign: TextAlign.center,
             text: TextSpan(
               style: const TextStyle(
@@ -72,7 +81,22 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
                 fontSize: 20,
                 color: Colors.black,
               ),
-              children: <TextSpan>[TextSpan(text: TTS_INPUT)],
+              children: <TextSpan>[
+                TextSpan(text: TTS_INPUT.substring(0, _currentWordStart)),
+                if (_currentWordStart != null)
+                  TextSpan(
+                    text: TTS_INPUT.substring(
+                      _currentWordStart!,
+                      _currentWordEnd,
+                    ),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      backgroundColor: Colors.deepOrange,
+                    ),
+                  ),
+                if (_currentWordEnd != null)
+                  TextSpan(text: TTS_INPUT.substring(_currentWordEnd!)),
+              ],
             ),
           ),
         ],
