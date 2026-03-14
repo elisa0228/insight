@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart'; //core flutter UI framework for building cross-platform widgets
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:insight_app/pages/speech.dart'; //convert text output into spoken audio using the device's built-in speech engine
+import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in speech engine
+import 'package:insight_app/pages/speech.dart';
 
 class SpeechIntegration extends StatefulWidget {
   const SpeechIntegration({super.key});
@@ -38,7 +38,7 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
           _voices = _voices
               .where((_voice) => _voice["name"].contains("en"))
               .toList();
-          _currentVoice == _voices.first;
+          _currentVoice = _voices.first;
           setVoice(_currentVoice!);
         });
       } catch (e) {

@@ -5,6 +5,7 @@ import 'package:dash_chat_2/dash_chat_2.dart'; //provides a full-features chat U
 import 'package:flutter/material.dart'; //core flutter UI framework for building cross-platform widgets
 import 'package:flutter_gemini/flutter_gemini.dart'; //gemini SDK used to interact with google's multimodal LLM (enbales both text only and image+text requests)
 import 'package:image_picker/image_picker.dart'; //enables secure access to the device photo gallery for selecting stored images
+import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in speech engine
 
 //ChatGeminiPage represents the primary conversational AI interface
 //it supports multimodal interaction by allowing users to submit both text and images
@@ -34,9 +35,16 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     firstName: "GeminiChat",
   ); //represents the gemini AI agent in the chat UI
 
+  //text to speech engine
+  final FlutterTts flutterTts = FlutterTts();
+
   @override
   void initState() {
     super.initState();
+    //text to speech configuration
+    flutterTts.setSpeechRate(0.5);
+    flutterTts.setPitch(1.0);
+    flutterTts.setVolume(1.0);
     //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
     if (widget.initialImagePath != null) {
       //constructs a ChatMessage containing both a default prompt and the captured image as multimodal input for gemini
@@ -56,6 +64,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         chatMessage,
       ); //automatically sends the constructed message to gemini on screen load
     }
+  }
+
+  //text to speech function
+  Future<void> speak(String text) async {
+    await flutterTts.speak(text);
   }
 
   //central message handling function
@@ -119,6 +132,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           setState(() {
             messages = [lastMessage!, ...messages];
           });
+          //speak updated response
+          speak(lastMessage.text);
         } else {
           //creates a new gemini message bubble for the first streamed chunk
           final responseMessage = ChatMessage(
@@ -129,6 +144,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           setState(() {
             messages = [responseMessage, ...messages];
           });
+          //speak new response
+          speak(response);
         }
       });
     } catch (e, stack) {
