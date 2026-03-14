@@ -12,6 +12,7 @@ class SpeechIntegration extends StatefulWidget {
 class _SpeechIntegrationState extends State<SpeechIntegration> {
   FlutterTts _flutterTts = FlutterTts();
 
+  List<Map> _voices = [];
   Map? _currentVoice;
 
   @override
@@ -24,11 +25,11 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
     //returns a dynamic feature (a list of maps)
     _flutterTts.getVoices.then((data) {
       try {
-        List<Map> _voices = List<Map>.from(data);
-        _voices = _voices
-            .where((_voice) => _voice["name"].contains("en"))
-            .toList();
+        _voices = List<Map>.from(data);
         setState(() {
+          _voices = _voices
+              .where((_voice) => _voice["name"].contains("en"))
+              .toList();
           _currentVoice == _voices.first;
           setVoice(_currentVoice!);
         });
@@ -45,12 +46,37 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: _buildUI(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _flutterTts.speak(TTS_INPUT);
         },
         child: const Icon(Icons.speaker_phone),
       ),
+    );
+  }
+
+  Widget _buildUI() {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [_speakerSelector()],
+      ),
+    );
+  }
+
+  Widget _speakerSelector() {
+    return DropdownButton(
+      value: _currentVoice,
+      items: _voices
+          .map(
+            (_voice) =>
+                DropdownMenuItem(value: _voice, child: Text(_voice["name"])),
+          )
+          .toList(),
+      onChanged: (value) {},
     );
   }
 }
