@@ -43,6 +43,11 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.speaker_phone),
+      ),
+    );
   }
 }
