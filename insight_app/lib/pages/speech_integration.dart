@@ -62,7 +62,20 @@ class _SpeechIntegrationState extends State<SpeechIntegration> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_speakerSelector()],
+        children: [
+          _speakerSelector(),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              children: <TextSpan>[TextSpan(text: TTS_INPUT)],
+            ),
+          ),
+        ],
       ),
     );
   }
