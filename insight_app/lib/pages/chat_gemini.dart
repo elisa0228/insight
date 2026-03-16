@@ -40,6 +40,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //text to speech engine
   final FlutterTts flutterTts = FlutterTts();
 
+  //speech to text engine
   late sst.SpeechToText _speech;
   bool _isListening = false;
   String _voiceText = "";
@@ -51,6 +52,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     flutterTts.setSpeechRate(0.5);
     flutterTts.setPitch(1.0);
     flutterTts.setVolume(1.0);
+    //initialise speech recognition
+    _speech = stt.SpeechToText();
     //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
     if (widget.initialImagePath != null) {
       //constructs a ChatMessage containing both a default prompt and the captured image as multimodal input for gemini
