@@ -41,7 +41,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final FlutterTts flutterTts = FlutterTts();
 
   //speech to text engine
-  late sst.SpeechToText _speech;
+  late stt.SpeechToText _speech;
   bool _isListening = false;
   String _voiceText = "";
 
@@ -78,6 +78,41 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //text to speech function
   Future<void> speak(String text) async {
     await flutterTts.speak(text);
+  }
+
+  //speech to text listening function
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize();
+
+      if (available) {
+        setState(() {
+          _isListening = true;
+        });
+        _speech.listen(
+          onResult: (result) {
+            setState(() {
+              _voiceText = result.recognizedWords;
+            });
+          },
+        );
+      }
+    } else {
+      setState(() {
+        _isListening = false;
+      });
+      _speech.stop();
+
+      if (_voiceText.isNotEmpty) {
+        ChatMessage chatMessage = ChatMessage(
+          text: _voiceText,
+          user: currentUser,
+          createdAt: DateTime.now(),
+        );
+        _onSend(chatMessage);
+        _voiceText = "";
+      }
+    }
   }
 
   //central message handling function
