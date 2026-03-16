@@ -6,7 +6,8 @@ import 'package:flutter/material.dart'; //core flutter UI framework for building
 import 'package:flutter_gemini/flutter_gemini.dart'; //gemini SDK used to interact with google's multimodal LLM (enbales both text only and image+text requests)
 import 'package:image_picker/image_picker.dart'; //enables secure access to the device photo gallery for selecting stored images
 import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
-import 'package:speech_to_text/speech_to_text.dart'; //convert speech output into spoken audio using the device's built-in speech-to-text engine
+import 'package:speech_to_text/speech_to_text.dart'
+    as stt; //convert speech output into spoken audio using the device's built-in speech-to-text engine
 
 //ChatGeminiPage represents the primary conversational AI interface
 //it supports multimodal interaction by allowing users to submit both text and images
@@ -38,6 +39,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
 
   //text to speech engine
   final FlutterTts flutterTts = FlutterTts();
+
+  late sst.SpeechToText _speech;
+  bool _isListening = false;
+  String _voiceText = "";
 
   @override
   void initState() {
