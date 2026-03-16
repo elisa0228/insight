@@ -52,6 +52,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     flutterTts.setSpeechRate(0.5);
     flutterTts.setPitch(1.0);
     flutterTts.setVolume(1.0);
+    //restart listening after gemini speaks
+    flutterTts.setCompletionHandler(() {
+      //automatically restart listening after speech finishes
+      _listen();
+    });
     //initialise speech recognition
     _speech = stt.SpeechToText();
     //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
