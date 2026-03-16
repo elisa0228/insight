@@ -7,7 +7,7 @@ import 'package:flutter_gemini/flutter_gemini.dart'; //gemini SDK used to intera
 import 'package:image_picker/image_picker.dart'; //enables secure access to the device photo gallery for selecting stored images
 import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
 import 'package:speech_to_text/speech_to_text.dart'
-    as stt; //convert speech output into spoken audio using the device's built-in speech-to-text engine
+    as stt; //convert spoken user input into text using the device's speech recognition engine
 
 //ChatGeminiPage represents the primary conversational AI interface
 //it supports multimodal interaction by allowing users to submit both text and images
@@ -202,6 +202,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       inputOptions: InputOptions(
         trailing: [
           IconButton(onPressed: _sendImageMessage, icon: Icon(Icons.image)),
+          IconButton(
+            icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+            onPressed: _listen,
+          ),
         ],
       ),
       currentUser:
