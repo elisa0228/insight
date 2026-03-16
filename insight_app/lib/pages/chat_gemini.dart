@@ -88,7 +88,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
 
   //speech to text listening function
   void _listen() async {
-    if (!_isListening) {
+    if (!_speech.isListening) {
       bool available = await _speech.initialize();
 
       if (available) {
@@ -96,27 +96,22 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           _isListening = true;
         });
         _speech.listen(
+          listenMode: stt.ListenMode.confirmation,
           onResult: (result) {
-            setState(() {
+            if (result.finalResult) {
               _voiceText = result.recognizedWords;
-            });
+              if (_voiceText.isNotEmpty) {
+                ChatMessage chatMessage = ChatMessage(
+                  text: _voiceText,
+                  user: currentUser,
+                  createdAt: DateTime.now(),
+                );
+                _onSend(chatMessage);
+                _voiceText = "";
+              }
+            }
           },
         );
-      }
-    } else {
-      setState(() {
-        _isListening = false;
-      });
-      _speech.stop();
-
-      if (_voiceText.isNotEmpty) {
-        ChatMessage chatMessage = ChatMessage(
-          text: _voiceText,
-          user: currentUser,
-          createdAt: DateTime.now(),
-        );
-        _onSend(chatMessage);
-        _voiceText = "";
       }
     }
   }
