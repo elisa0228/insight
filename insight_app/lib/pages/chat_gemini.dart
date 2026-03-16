@@ -77,7 +77,13 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
 
   //text to speech function
   Future<void> speak(String text) async {
-    await flutterTts.speak(text);
+    //remove markdown formatting symbols before speech
+    String cleanedText = text
+        .replaceAll(RegExp(r'\*\*'), '')
+        .replaceAll(RegExp(r'\*'), '')
+        .replaceAll(RegExp(r'#'), '');
+
+    await flutterTts.speak(cleanedText);
   }
 
   //speech to text listening function
