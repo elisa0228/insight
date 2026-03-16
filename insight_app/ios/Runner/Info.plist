@@ -9,7 +9,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>access to the camera</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>access to the microphone</string>
+	<string>describe why your app needs access to the microphone</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>describe why your app uses speech recognition</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
