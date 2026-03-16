@@ -40,6 +40,7 @@ dependencies:
   flutter_gemini: ^3.0.0 # package for using with google gemini chat
   image_picker: ^1.2.1 # package for picking image from gallery
   flutter_tts: ^4.2.5 # package to integrate text-to-speech
+  speech_to_text: ^7.3.0 # package to integrate speech-to-text
 
 dev_dependencies:
   flutter_test:
