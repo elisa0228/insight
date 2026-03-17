@@ -90,8 +90,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     String cleanedText = text
         .replaceAll(RegExp(r'\*\*'), '')
         .replaceAll(RegExp(r'\*'), '')
-        .replaceAll(RegExp(r'#'), '');
+        .replaceAll(RegExp(r'#'), '')
+        .replaceAll(RegExp(r'_'), '')
+        .replaceAll(RegExp(r'’'), '');
 
+    await flutterTts.stop(); //prevents overlap
     await flutterTts.speak(cleanedText);
   }
 
