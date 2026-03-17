@@ -78,6 +78,9 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         chatMessage,
       ); //automatically sends the constructed message to gemini on screen load
     }
+    Future.delayed(Duration(seconds: 1), () {
+      _listen();
+    });
   }
 
   //text to speech function
