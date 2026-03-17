@@ -63,7 +63,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     if (widget.initialImagePath != null) {
       //constructs a ChatMessage containing both a default prompt and the captured image as multimodal input for gemini
       final chatMessage = ChatMessage(
-        text: "Describe this image please in detail",
+        text:
+            "You are an assistive AI for a visually impaired user. Describe the scene focusing on obstacles, distances and navigation. For example: 'A chair is two metres ahead, a table is to your left'",
         user: currentUser,
         createdAt: DateTime.now(),
         medias: [
@@ -220,7 +221,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       if (image != null) {
         //constructs a multimodal chat message using the selected image
         ChatMessage chatMessage = ChatMessage(
-          text: "Describe this image please in detail",
+          text:
+              "You are an assistive AI for a visually impaired user. Describe the scene focusing on obstacles, distances and navigation. For example: 'A chair is two metres ahead, a table is to your left'",
           user: currentUser,
           createdAt: DateTime.now(),
           medias: [
