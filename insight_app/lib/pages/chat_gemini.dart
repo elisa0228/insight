@@ -55,7 +55,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     //restart listening after gemini speaks
     flutterTts.setCompletionHandler(() {
       //automatically restart listening after speech finishes
-      _listen();
+      _startListening();
     });
     //initialise speech recognition
     _speech = stt.SpeechToText();
@@ -79,7 +79,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       ); //automatically sends the constructed message to gemini on screen load
     }
     Future.delayed(Duration(seconds: 1), () {
-      _listen();
+      _startListening();
     });
   }
 
@@ -95,7 +95,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   }
 
   //speech to text listening function
-  void _listen() async {
+  void _startListening() async {
     if (!_speech.isListening) {
       bool available = await _speech.initialize();
 
@@ -104,18 +104,23 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           _isListening = true;
         });
         _speech.listen(
-          listenMode: stt.ListenMode.confirmation,
+          listenMode: stt.ListenMode.dictation,
           onResult: (result) {
             if (result.finalResult) {
-              _voiceText = result.recognizedWords;
-              if (_voiceText.isNotEmpty) {
-                ChatMessage chatMessage = ChatMessage(
-                  text: _voiceText,
-                  user: currentUser,
-                  createdAt: DateTime.now(),
-                );
-                _onSend(chatMessage);
-                _voiceText = "";
+              String spokenText = result.recognizedWords.toLowerCase();
+              //wake word detection
+              if (spokenText.contains("hey insight")) {
+                String cleanedCommand = spokenText
+                    .replaceAll("hey insight", "")
+                    .trim();
+                if (cleanedCommand.isNotEmpty) {
+                  ChatMessage chatMessage = ChatMessage(
+                    text: cleanedCommand,
+                    user: currentUser,
+                    createdAt: DateTime.now(),
+                  );
+                  _onSend(chatMessage);
+                }
               }
             }
           },
@@ -248,7 +253,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           IconButton(onPressed: _sendImageMessage, icon: Icon(Icons.image)),
           IconButton(
             icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
-            onPressed: _listen,
+            onPressed: _startListening,
           ),
         ],
       ),
