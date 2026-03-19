@@ -52,28 +52,17 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final stt.SpeechToText _speech = stt.SpeechToText();
 
   bool _isListening = false;
-  bool _isSpeaking = false;
-  bool _speechEnabled = false;
-  bool _processingCommand = false;
-  Timer? _restartTimer;
+  bool _isSpeaking = false; //track speaking state to prevent feedback loop
+  bool _speechEnabled = false; //track if speech system is ready
+  bool _processingCommand = false; //prevent duplicate commands
+  Timer? _restartTimer; //timer to restart listening automatically
 
   @override
   void initState() {
     super.initState();
     _setupTts();
     _initSpeech();
-    //text to speech configuration
-    flutterTts.setSpeechRate(0.5);
-    flutterTts.setPitch(1.0);
-    flutterTts.setVolume(1.0);
-    //restart listening after gemini speaks
-    flutterTts.setCompletionHandler(() {
-      //automatically restart listening after speech finishes
-      _startListening();
-    });
-    //initialise speech recognition
-    _speech = stt.SpeechToText();
-    //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
+
     if (widget.initialImagePath != null) {
       //constructs a ChatMessage containing both a default prompt and the captured image as multimodal input for gemini
       final chatMessage = ChatMessage(
@@ -93,6 +82,19 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         chatMessage,
       ); //automatically sends the constructed message to gemini on screen load
     }
+    //text to speech configuration
+    flutterTts.setSpeechRate(0.5);
+    flutterTts.setPitch(1.0);
+    flutterTts.setVolume(1.0);
+    //restart listening after gemini speaks
+    flutterTts.setCompletionHandler(() {
+      //automatically restart listening after speech finishes
+      _startListening();
+    });
+    //initialise speech recognition
+    _speech = stt.SpeechToText();
+    //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
+
     Future.delayed(Duration(seconds: 1), () {
       _startListening();
     });
