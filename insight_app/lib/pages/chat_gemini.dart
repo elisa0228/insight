@@ -156,7 +156,13 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   Future<void> _startListening() async {
     if (!_speechEnabled || _isListening || _isSpeaking) return;
 
-    
+    final started = await _speech.listen(
+      listenMode: stt.ListenMode.dictation,
+      partialResults: true,
+      pauseFor: const Duration(seconds: 3),
+      listenFor: const Duration(minutes: 1),
+    )
+
       bool available = await _speech.initialize();
 
       if (available) {
