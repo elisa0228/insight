@@ -120,9 +120,16 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         .replaceAll(RegExp(r'#'), '')
         .replaceAll(RegExp(r'_'), '')
         .replaceAll('’', "'");
-
-    await flutterTts.stop(); //prevents overlap
+    //prevents overlapping speech by explicitly stopping any current text-to-speech playback before speaking a new response, this avoids clutter or repeated audio output
+    await flutterTts.stop();
     await flutterTts.speak(cleanedText);
+  }
+
+  //initialises speech recognition with continuous restart behaviour
+  Future<void> _initSpeech() async {
+    _speechEnabled = await _speech.initialize(
+      
+    )
   }
 
   //speech to text listening function
