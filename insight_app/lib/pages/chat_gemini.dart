@@ -82,22 +82,23 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         chatMessage,
       ); //automatically sends the constructed message to gemini on screen load
     }
-    //text to speech configuration
-    void _setupTts() {
-      flutterTts.setSpeechRate(0.45);
-      flutterTts.setPitch(1.0);
-      flutterTts.setVolume(1.0);
+  }
 
-      flutterTts.setStartHandler(() {
-        _isSpeaking = true;
-        _stopListening();
-      });
-      //restart listening after gemini speaks
-      flutterTts.setCompletionHandler(() {
-        _isSpeaking = true;
-        _scheduleRestartListening(); //automatically restart listening after speech finishes
-      });
-    }
+  //text to speech configuration
+  void _setupTts() {
+    flutterTts.setSpeechRate(0.45);
+    flutterTts.setPitch(1.0);
+    flutterTts.setVolume(1.0);
+
+    flutterTts.setStartHandler(() {
+      _isSpeaking = true;
+      _stopListening();
+    });
+    //restart listening after gemini speaks
+    flutterTts.setCompletionHandler(() {
+      _isSpeaking = true;
+      _scheduleRestartListening(); //automatically restart listening after speech finishes
+    });
   }
 
   //text to speech function
