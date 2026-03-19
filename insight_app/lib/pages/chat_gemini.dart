@@ -152,9 +152,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     });
   }
 
-  //speech to text listening function
-  void _startListening() async {
-    if (!_speech.isListening) {
+  //starts speech recognition in dictation mode
+  Future<void> _startListening() async {
+    if (!_speechEnabled || _isListening || _isSpeaking) return;
+
+    
       bool available = await _speech.initialize();
 
       if (available) {
