@@ -83,6 +83,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       ); //automatically sends the constructed message to gemini on screen load
     }
     //text to speech configuration
+    void _setupTts() {}
     flutterTts.setSpeechRate(0.5);
     flutterTts.setPitch(1.0);
     flutterTts.setVolume(1.0);
