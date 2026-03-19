@@ -161,6 +161,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       partialResults: true,
       pauseFor: const Duration(seconds: 3),
       listenFor: const Duration(minutes: 1),
+      onResult: (result) async {
+        if (!mounted) return;
+        if (!result.finalResult || _processingCommand) return;
+      }
     )
 
       bool available = await _speech.initialize();
