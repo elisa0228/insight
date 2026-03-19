@@ -164,6 +164,15 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       onResult: (result) async {
         if (!mounted) return;
         if (!result.finalResult || _processingCommand) return;
+
+        final spokenText = result.recognizedWords.toLowerCase().trim();
+
+        debugPrint("heard: $spokenText");
+
+        //wake word is required before any command is processed
+        if (!spokenText.contains("hey insight")) return;
+
+        final command = spokenText.replaceAll("hey insight", "").trim();
       }
     )
 
