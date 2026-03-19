@@ -173,38 +173,13 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         if (!spokenText.contains("hey insight")) return;
 
         final command = spokenText.replaceAll("hey insight", "").trim();
+
+        _processingCommand = true;
+        await _stopListening();
+        
       }
     )
 
-      bool available = await _speech.initialize();
-
-      if (available) {
-        setState(() {
-          _isListening = true;
-        });
-        _speech.listen(
-          listenMode: stt.ListenMode.dictation,
-          onResult: (result) {
-            if (result.finalResult) {
-              String spokenText = result.recognizedWords.toLowerCase();
-              //wake word detection
-              if (spokenText.contains("hey insight")) {
-                String cleanedCommand = spokenText
-                    .replaceAll("hey insight", "")
-                    .trim();
-                if (cleanedCommand.isNotEmpty) {
-                  ChatMessage chatMessage = ChatMessage(
-                    text: cleanedCommand,
-                    user: currentUser,
-                    createdAt: DateTime.now(),
-                  );
-                  _onSend(chatMessage);
-                }
-              }
-            }
-          },
-        );
-      }
     }
   }
 
