@@ -50,9 +50,12 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //speech to text engine
   //initialise dthe pseech recognition engine for capturing microphone input and converting spoken commands into text, this provides the core mechanism require for voice-driven interaction
   final stt.SpeechToText _speech = stt.SpeechToText();
-  late stt.SpeechToText _speech;
+
   bool _isListening = false;
-  String _voiceText = "";
+  bool _isSpeaking = false;
+  bool _speechEnabled = false;
+  bool _processingCommand = false;
+  Timer? _restartTimer;
 
   @override
   void initState() {
