@@ -60,6 +60,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   @override
   void initState() {
     super.initState();
+    _setupTts();
+    _initSpeech();
     //text to speech configuration
     flutterTts.setSpeechRate(0.5);
     flutterTts.setPitch(1.0);
