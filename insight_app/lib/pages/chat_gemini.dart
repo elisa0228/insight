@@ -41,6 +41,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final FlutterTts flutterTts = FlutterTts();
 
   //speech to text engine
+  final stt.SpeechToText _speech = stt.SpeechToText();
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _voiceText = "";
