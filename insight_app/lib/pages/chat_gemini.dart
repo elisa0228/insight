@@ -185,11 +185,14 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           _scheduleRestartListening();
           return;
         }
-      }
-    )
 
-    }
+        final chatMessage = ChatMessage(text: command, user: currentUser, createdAt: DateTime.now(),);
+        _onSend(chatMessage);
+        _processingCommand = false;
+      },
+    );
   }
+}
 
   //central message handling function
   //responsible for:
