@@ -114,12 +114,12 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //text to speech function
   Future<void> speak(String text) async {
     //remove markdown formatting symbols before speech
-    String cleanedText = text
+    final cleanedText = text
         .replaceAll(RegExp(r'\*\*'), '')
         .replaceAll(RegExp(r'\*'), '')
         .replaceAll(RegExp(r'#'), '')
         .replaceAll(RegExp(r'_'), '')
-        .replaceAll(RegExp(r'’'), '');
+        .replaceAll('’', "'");
 
     await flutterTts.stop(); //prevents overlap
     await flutterTts.speak(cleanedText);
