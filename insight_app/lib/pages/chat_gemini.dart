@@ -133,8 +133,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           _scheduleRestartListening();
         }
       },
-      
-    )
+      onError: (error) {
+        _scheduleRestartListening();
+      },
+    );
   }
 
   //speech to text listening function
