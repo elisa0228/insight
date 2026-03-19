@@ -176,6 +176,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
 
         _processingCommand = true;
         await _stopListening();
+
+        //siri type of acknowledgement after wake word detection
+        await speak("yes?");
+
         
       }
     )
