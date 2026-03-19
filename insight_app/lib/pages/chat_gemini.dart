@@ -92,20 +92,12 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         _isSpeaking = true;
         _stopListening();
       });
+      //restart listening after gemini speaks
+      flutterTts.setCompletionHandler(() {
+        _isSpeaking = true;
+        _scheduleRestartListening(); //automatically restart listening after speech finishes
+      });
     }
-
-    //restart listening after gemini speaks
-    flutterTts.setCompletionHandler(() {
-      //automatically restart listening after speech finishes
-      _startListening();
-    });
-    //initialise speech recognition
-    _speech = stt.SpeechToText();
-    //if an image was passed from the camera page, automatically send it to gemini with a default prompt without requiring manual user input
-
-    Future.delayed(Duration(seconds: 1), () {
-      _startListening();
-    });
   }
 
   //text to speech function
