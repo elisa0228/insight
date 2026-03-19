@@ -128,6 +128,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //initialises speech recognition with continuous restart behaviour
   Future<void> _initSpeech() async {
     _speechEnabled = await _speech.initialize(
+      onStatus: (status) {
+        if (status == 'done' || status == 'notListening') {
+          _scheduleRestartListening();
+        }
+      },
       
     )
   }
