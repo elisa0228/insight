@@ -186,13 +186,28 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           return;
         }
 
-        final chatMessage = ChatMessage(text: command, user: currentUser, createdAt: DateTime.now(),);
+        final chatMessage = ChatMessage(
+          text: command,
+          user: currentUser,
+          createdAt: DateTime.now(),
+        );
         _onSend(chatMessage);
         _processingCommand = false;
       },
     );
   }
-}
+
+  //stops speech recognition and clears any pending restart timer
+  Future<void> _stopListening() async {
+    _restartTimer?.cancel();
+
+    if (_speech.isListening) {
+      await _speech.stop();
+    }
+    setState(() {
+      _isListening = false;
+    });
+  }
 
   //central message handling function
   //responsible for:
