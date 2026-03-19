@@ -89,7 +89,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     flutterTts.setSpeechRate(0.45);
     flutterTts.setPitch(1.0);
     flutterTts.setVolume(1.0);
-
+    //stop listening when the app starts speaking to avoid feedback loops
     flutterTts.setStartHandler(() {
       _isSpeaking = true;
       _stopListening();
@@ -98,6 +98,16 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     flutterTts.setCompletionHandler(() {
       _isSpeaking = true;
       _scheduleRestartListening(); //automatically restart listening after speech finishes
+    });
+    //also recover listening if speech fails
+    flutterTts.setErrorHandler((message) {
+      _isSpeaking = false;
+      _scheduleRestartListening();
+    });
+    //also recover listening if speech is cancelled
+    flutterTts.setCancelHandler(() {
+      _isSpeaking = false;
+      _scheduleRestartListening();
     });
   }
 
