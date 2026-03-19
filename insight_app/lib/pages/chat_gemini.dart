@@ -180,7 +180,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         //siri type of acknowledgement after wake word detection
         await speak("yes?");
 
-        
+        if (command.isEmpty) {
+          _processingCommand = false;
+          _scheduleRestartListening();
+          return;
+        }
       }
     )
 
