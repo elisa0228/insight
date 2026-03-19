@@ -87,6 +87,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       flutterTts.setSpeechRate(0.45);
       flutterTts.setPitch(1.0);
       flutterTts.setVolume(1.0);
+
+      flutterTts.setStartHandler(() {
+        _isSpeaking = true;
+        _stopListening();
+      });
     }
 
     //restart listening after gemini speaks
