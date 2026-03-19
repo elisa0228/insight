@@ -142,6 +142,16 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     }
   }
 
+  //schedules a delayed restart to avoid rapid recognition restarts
+  void _scheduleRestartListening() {
+    _restartTimer?.cancel();
+    _restartTimer = Timer(Duration(milliseconds: 700), () {
+      if (!_isListening && !_isSpeaking) {
+        _startListening();
+      }
+    });
+  }
+
   //speech to text listening function
   void _startListening() async {
     if (!_speech.isListening) {
