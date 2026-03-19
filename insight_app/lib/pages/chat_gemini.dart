@@ -1,10 +1,14 @@
 import 'dart:io'; //core dart libraries used to handle file system access and binary image data
 import 'dart:typed_data'; //required to convert locally stored images into byte arrays for LLM upload
+//imported asynchronous timing support to manage automatical speech recognition restart behaviour, this enables timer-based recovery when listening stops, forming the basis of the continuous listening pipeline
+import 'dart:async'; //required to support continuous listening restart timer
 
+//retained multimodal chat dependencies to support text, image and AI-assisted conversational interaction, these imports provide the surrounding infrastructure required for integrating voice features into the existing chat workflow
 import 'package:dash_chat_2/dash_chat_2.dart'; //provides a full-features chat UI framework including message bubbles, input fields and message streaming visual updates
 import 'package:flutter/material.dart'; //core flutter UI framework for building cross-platform widgets
 import 'package:flutter_gemini/flutter_gemini.dart'; //gemini SDK used to interact with google's multimodal LLM (enbales both text only and image+text requests)
 import 'package:image_picker/image_picker.dart'; //enables secure access to the device photo gallery for selecting stored images
+//imported tts and speech recognition pakacge to support bidirectional voice interaction
 import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
 import 'package:speech_to_text/speech_to_text.dart'
     as stt; //convert spoken user input into text using the device's speech recognition engine
@@ -12,6 +16,7 @@ import 'package:speech_to_text/speech_to_text.dart'
 //ChatGeminiPage represents the primary conversational AI interface
 //it supports multimodal interaction by allowing users to submit both text and images
 //the optional initialImagePath enables automated AI requests triggered on screen load
+//preserved the ChatGeminiPage widget structure and optional initialImagePath parameter to maintain compaitbility with the image-driven workflow, this ensures voice enhancements do not break the existing assistive image analysis feature
 class ChatGeminiPage extends StatefulWidget {
   //optional image path passed via Navigator from the camera workflow
   //this enables automated processing of newly captured images
@@ -23,6 +28,7 @@ class ChatGeminiPage extends StatefulWidget {
   State<ChatGeminiPage> createState() => _ChatGeminiPageState();
 }
 
+//initialised the gemini client and chat user models to preserve to existing conversational architecture while extending it with voice capabilities, this keps the voice pipeline aligned with the established messaging flow
 class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final Gemini gemini = Gemini
       .instance; //gemini client instance used to manage API requests and streaming responses
@@ -38,9 +44,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   ); //represents the gemini AI agent in the chat UI
 
   //text to speech engine
+  //initialised the text-to-speech engine for spoken AI feedback, this enables generated responses to be delivered in an accessible audio format for visually impaired users
   final FlutterTts flutterTts = FlutterTts();
 
   //speech to text engine
+  //initialise dthe pseech recognition engine for capturing microphone input and converting spoken commands into text, this provides the core mechanism require for voice-driven interaction
   final stt.SpeechToText _speech = stt.SpeechToText();
   late stt.SpeechToText _speech;
   bool _isListening = false;
