@@ -2,6 +2,7 @@ import 'package:camera/camera.dart'; //imports the flutter camera plugin for acc
 import 'package:flutter/material.dart'; //imports core flutter matieral UI components
 import 'package:gal/gal.dart'; //imports the gallery plugin to save images to the device gallery
 import 'chat_gemini.dart'; //imports the llm function
+import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
 
 //homepage widget represents the main screen of the application
 // responsible for:
@@ -25,11 +26,18 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   CameraController? //manages the selected camera stream, handles preview rendering and executed image capture
   cameraController; //controls the selected camera and manages camera operations
 
+  //text to speech
+  final FlutterTts flutterTts = FlutterTts();
+
+  Future<void> speak(String text) async {
+    await flutterTts.stop();
+    await flutterTts.speak(text);
+  }
+
   //handles app lifecycle changes (e.g. app paused or resumed, background and foreground)
   //this is critical for releasing hardware resources correctly and preventing camera lock or crashes, when the app is paused
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
     //if the camera controller is not ready, exit early (not initialised, there is no reasource to manage)
     if (cameraController == null ||
         cameraController?.value.isInitialized == false) {
@@ -41,9 +49,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     //this prevents memory leaks and camera access conflicts
     if (state == AppLifecycleState.inactive) {
       cameraController?.dispose();
-    }
-    //reinitialises the camera when the app is resumed to restore functionality
-    else if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.resumed) {
+      //reinitialises the camera when the app is resumed to restore functionality
       _setupCameraController();
     }
   }
@@ -53,7 +60,21 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    //smoother speech
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setSpeechRate(0.45);
+
     _setupCameraController(); //initialises the camera when the app starts
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    cameraController?.dispose();
+    flutterTts.stop();
+    super.dispose();
   }
 
   //builds the main UI scaffold for the camera screen
@@ -62,7 +83,16 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       //app bar with a title
-      appBar: AppBar(title: const Text("Detect Picture")),
+      appBar: AppBar(
+        title: const Text("Detect Picture"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            await speak("Navigating back to home page");
+            Navigator.pop(context);
+          },
+        ),
+      ),
       //builds the camera interface
       body: _buildUI(),
     );
@@ -96,28 +126,32 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             ),
             //camera capture button
             IconButton(
+              //sets the icon size - large icon size improves accessibility and usability
+              iconSize: 100,
+              //displays a red camera icon which provides clear visual utility for the capture action
+              icon: const Icon(Icons.camera, color: Colors.red),
               //triggered when the user presses the camera button
               onPressed: () async {
                 //takes a high resolution image using the camera
                 XFile picture = await cameraController!.takePicture();
                 //saves the captures image to the device gallery
                 //this supports secure local storage, auditability and optional later user review
-                Gal.putImage(picture.path);
-
+                await Gal.putImage(picture.path);
+                //speak before navigation
+                await speak ("Sending picture to chstbot")
                 //navigates to the gemini chat screen, passing the image path as a parameter
                 //this enables automated multimodal AI analysis on screen load in the next widget
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) =>
-                        ChatGeminiPage(initialImagePath: picture.path),
+                        ChatGeminiPage(initialImagePath: picture.path
+                    ),
                   ),
                 );
-              },
-              //sets the icon size - large icon size improves accessibility and usability
-              iconSize: 100,
-              //displays a red camera icon which provides clear visual utility for the capture action
-              icon: const Icon(Icons.camera, color: Colors.red),
+              } catch (e) {
+                debugPrint("Camera error: $e");
+              }
             ),
           ],
         ),
@@ -147,15 +181,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
           .then((_) {
             //prevents state update if the widget has been removed, avoiding crashes caused by asynchronous camera initialisation
             //this avoid common flutter lifecycle crashes
-            if (!mounted) {
-              return;
-            }
+            if (!mounted) return;
             //refreshes the UI once the camera is ready
             setState(() {});
           })
-          //handles (logs) camera initialisation errors for debugging
-          .catchError((Object e) {
-            print(e);
+          .catchError((e) {
+            //handles (logs) camera initialisation errors for debugging
+            debugPrint(e.toString());
           });
     }
   }
