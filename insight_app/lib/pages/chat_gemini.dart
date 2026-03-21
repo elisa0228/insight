@@ -384,7 +384,17 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //AppBar provides consistent navigation context for the chat screen
-      appBar: AppBar(title: Text('Chat Gemini'), centerTitle: true),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            await speak("navigating back to picture preview");
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Chat Gemini'),
+        centerTitle: true,
+      ),
       //main chat UI rendered via DashChat widget
       body: _buildChatUi(),
     );
