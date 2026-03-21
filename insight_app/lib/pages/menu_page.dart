@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'; //imports flutter matieral components to build a standard Android/iOS styled UI widgets
 import 'camera_picture.dart'; //imports the CameraPage which handles real-time camera preview and image capture
 import 'chat_gemini.dart'; //imports the ChatGeminiPage which manages the LLM (Gemini) chatbot and image-to-AI interaction
@@ -27,21 +28,35 @@ class _MenuPageState extends State<MenuPage> {
     _initSpeech();
   }
 
-  void _restartListening() async {
-    await _speech.stop();
+  //void _restartListening() async {
+  //await _speech.stop();
 
-    setState(() {
-      _isListening = false;
-    });
+  //setState(() {
+  //_isListening = false;
+  //});
 
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      _startListening();
-    });
-  }
+  //Future.delayed(const Duration(milliseconds: 1000), () {
+  //_startListening();
+  //});
+  //}
 
   //initialise speech recognition
   Future<void> _initSpeech() async {
-    _speechEnabled = await _speech.initialize();
+    _speechEnabled = await _speech.initialize(
+      onStatus: (status) {
+        debugPrint("STATUS: $status");
+
+        if (!mounted) return;
+
+        if (status == "done" || status == "not listening") {
+          _restartListening();
+        }
+      },
+      onError: (error) {
+        debugPrint("ERROR: $error");
+        _restartListening();
+      },
+    );
 
     if (_speechEnabled) {
       _startListening();
@@ -52,47 +67,71 @@ class _MenuPageState extends State<MenuPage> {
   Future<void> _startListening() async {
     if (!_speechEnabled || _isListening) return;
 
+    debugPrint("START LISTEING");
+
     await _speech.listen(
       listenMode: stt.ListenMode.dictation,
       onResult: (result) {
         if (!result.finalResult) return;
 
         final spokenText = result.recognizedWords.toLowerCase();
-
         debugPrint("heard: $spokenText");
 
-        //detect wake word
-        if (!(spokenText.contains("hey insight") ||
-            spokenText.contains("heyinsight"))) {
-          _restartListening();
-          return;
-        }
-
-        final command = spokenText
-            .replaceAll("hey insight", "")
-            .replaceAll("heyinsight", "")
-            .trim();
-
-        //navigate based on command
-        if (command.contains("camera")) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CameraPage()),
-          );
-        }
-
-        if (command.contains("chat")) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ChatGeminiPage()),
-          );
-        }
-        _restartListening();
+        _handleCommand(spokenText);
       },
     );
+    if (!mounted) return;
 
     setState(() {
       _isListening = true;
+    });
+  }
+
+  //handle voice commands
+  void _handleCommand(String spokenText) {
+    //must contain wake word
+    if (!(spokenText.contains("hey insight") ||
+        spokenText.contains("heyinsight"))) {
+      _restartListening();
+      return;
+    }
+    final command = spokenText
+        .replaceAll("hey insight", "")
+        .replaceAll("heyinsight", "")
+        .trim();
+
+    debugPrint("COMMAND: $command");
+
+    //navigation
+    if (command.contains("camera")) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const CameraPage()),
+      );
+    } else if (command.contains("chat") || command.contains("bot")) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ChatGeminiPage()),
+      );
+    }
+
+    _restartListening();
+  }
+
+  //restart listening
+  void _restartListening() async {
+    await _speech.stop();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isListening = false;
+    });
+
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted) {
+        _startListening();
+      }
     });
   }
 
