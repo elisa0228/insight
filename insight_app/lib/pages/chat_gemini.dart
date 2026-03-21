@@ -174,7 +174,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //schedules a delayed restart to avoid rapid recognition restarts
   void _scheduleRestartListening() {
     _restartTimer?.cancel();
-    _restartTimer = Timer(const Duration(milliseconds: 700), () {
+    _restartTimer = Timer(const Duration(milliseconds: 1000), () {
       if (!mounted) return;
       if (!_isListening &&
           !_isSpeaking &&
@@ -204,27 +204,25 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       pauseFor: const Duration(seconds: 3),
       listenFor: const Duration(minutes: 1),
       onResult: (result) async {
-        if (!mounted) return;
         if (!result.finalResult || _processingCommand) return;
 
         final spokenText = result.recognizedWords.toLowerCase().trim();
         debugPrint("heard: $spokenText");
 
+        String command = spokenText;
+        bool usedWakeWord = false;
         //wake word is required before any command is processed
-        if (!spokenText.contains("hey insight")) return;
+        if (spokenText.contains("hey insight")) {
+          command = spokenText.replaceAll("hey insight", "").trim();
+          usedWakeWord = true;
+        }
 
-        final command = spokenText.replaceAll("hey insight", "").trim();
-
+        if (command.isEmpty) return;
         _processingCommand = true;
-        await _stopListening();
 
-        //siri type of acknowledgement after wake word detection
-        await speak("yes?");
-
-        if (command.isEmpty) {
-          _processingCommand = false;
-          _scheduleRestartListening();
-          return;
+        if (usedWakeWord) {
+          await _stopListening();
+          await speak("yes?");
         }
 
         final chatMessage = ChatMessage(
