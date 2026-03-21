@@ -26,12 +26,34 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   CameraController? //manages the selected camera stream, handles preview rendering and executed image capture
   cameraController; //controls the selected camera and manages camera operations
 
-  //text to speech
+  // 🔊 TEXT TO SPEECH
   final FlutterTts flutterTts = FlutterTts();
 
   Future<void> speak(String text) async {
     await flutterTts.stop();
     await flutterTts.speak(text);
+  }
+
+  //called once when the widget is first created
+  //this is the appropriate place to initialise long-lived resources such as the camera controller
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    // smoother speech (important)
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setSpeechRate(0.45);
+
+    _setupCameraController(); //initialises the camera when the app starts
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    cameraController?.dispose();
+    flutterTts.stop();
+    super.dispose();
   }
 
   //handles app lifecycle changes (e.g. app paused or resumed, background and foreground)
@@ -50,113 +72,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive) {
       cameraController?.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      //reinitialises the camera when the app is resumed to restore functionality
-      _setupCameraController();
+      _setupCameraController(); //reinitialises the camera when the app is resumed to restore functionality
     }
-  }
-
-  //called once when the widget is first created
-  //this is the appropriate place to initialise long-lived resources such as the camera controller
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
-    //smoother speech
-    flutterTts.awaitSpeakCompletion(true);
-    flutterTts.setSpeechRate(0.45);
-
-    _setupCameraController(); //initialises the camera when the app starts
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    cameraController?.dispose();
-    flutterTts.stop();
-    super.dispose();
-  }
-
-  //builds the main UI scaffold for the camera screen
-  //this provides consistent navigation structure and layout
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //app bar with a title
-      appBar: AppBar(
-        title: const Text("Detect Picture"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () async {
-            await speak("Navigating back to home page");
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      //builds the camera interface
-      body: _buildUI(),
-    );
-  }
-
-  //builds the camera preview and capture button for the user interface
-  Widget _buildUI() {
-    //shows a loading indicator while the camera is initialising
-    if (cameraController == null ||
-        cameraController?.value.isInitialized == false) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return SafeArea(
-      //ensures UI avoids system areas such as the notch (buttons, text and camera preview do not overlap with hardware or system elements)
-      child: SizedBox.expand(
-        //expands content to fill the screen
-        child: Column(
-          //spaces elements evenly on the screen
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //centres elements horizontally
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //displays the live camera feed to the user
-            SizedBox(
-              //sets camera preview height dynamically
-              height: MediaQuery.sizeOf(context).height - 250,
-              //uses full screen width
-              width: MediaQuery.sizeOf(context).width,
-              //shows the live camera stream
-              child: CameraPreview(cameraController!),
-            ),
-            //camera capture button
-            IconButton(
-              //sets the icon size - large icon size improves accessibility and usability
-              iconSize: 100,
-              //displays a red camera icon which provides clear visual utility for the capture action
-              icon: const Icon(Icons.camera, color: Colors.red),
-              //triggered when the user presses the camera button
-              onPressed: () async {
-                //takes a high resolution image using the camera
-                XFile picture = await cameraController!.takePicture();
-                //saves the captures image to the device gallery
-                //this supports secure local storage, auditability and optional later user review
-                await Gal.putImage(picture.path);
-                //speak before navigation
-                await speak ("Sending picture to chstbot")
-                //navigates to the gemini chat screen, passing the image path as a parameter
-                //this enables automated multimodal AI analysis on screen load in the next widget
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        ChatGeminiPage(initialImagePath: picture.path
-                    ),
-                  ),
-                );
-              } catch (e) {
-                debugPrint("Camera error: $e");
-              }
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   //sets up and initialises and configures the camera controller
@@ -190,5 +107,93 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             debugPrint(e.toString());
           });
     }
+  }
+
+  //builds the main UI scaffold for the camera screen
+  //this provides consistent navigation structure and layout
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      //app bar with a title
+      appBar: AppBar(
+        title: const Text("Detect Picture"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () async {
+            await speak("Navigating back to home page");
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      //builds the camera interface
+      body: _buildUI(),
+    );
+  }
+
+  //builds the camera preview and capture button for the user interface
+  Widget _buildUI() {
+    //shows a loading indicator while the camera is initialising
+    if (cameraController == null ||
+        cameraController?.value.isInitialized == false) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return SafeArea(
+      //ensures UI avoids system areas such as the notch (buttons, text and camera preview do not overlap with hardware or system elements)
+      child: SizedBox.expand(
+        //expands content to fill the screen
+        child: Column(
+          //spaces elements evenly on the screen
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //centres elements horizontally
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //displays the live camera feed to the user
+            SizedBox(
+              //sets camera preview height dynamically
+              height: MediaQuery.sizeOf(context).height - 250,
+              //uses full screen width
+              width: MediaQuery.sizeOf(context).width,
+              //shows the live camera stream
+              child: CameraPreview(cameraController!),
+            ),
+
+            //camera capture button
+            IconButton(
+              //sets the icon size - large icon size improves accessibility and usability
+              iconSize: 100,
+              //displays a red camera icon which provides clear visual utility for the capture action
+              icon: const Icon(Icons.camera, color: Colors.red),
+              //triggered when the user presses the camera button
+              onPressed: () async {
+                try {
+                  //takes a high resolution image using the camera
+                  XFile picture = await cameraController!.takePicture();
+
+                  //saves the captures image to the device gallery
+                  //this supports secure local storage, auditability and optional later user review
+                  await Gal.putImage(picture.path);
+
+                  //speak before navigation
+                  await speak("Sending picture to chatbot");
+
+                  //navigates to the gemini chat screen, passing the image path as a parameter
+                  //this enables automated multimodal AI analysis on screen load in the next widget
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          ChatGeminiPage(initialImagePath: picture.path),
+                    ),
+                  );
+                } catch (e) {
+                  debugPrint("Camera error: $e");
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
