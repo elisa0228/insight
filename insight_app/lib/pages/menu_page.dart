@@ -67,19 +67,24 @@ class _MenuPageState extends State<MenuPage> {
   Future<void> _startListening() async {
     if (!_speechEnabled || _isListening) return;
 
-    debugPrint("START LISTEING");
+    debugPrint("START LISTENING");
 
     await _speech.listen(
       listenMode: stt.ListenMode.dictation,
+      partialResults: true,
+      listenFor: const Duration(minutes: 5),
+      pauseFor: const Duration(seconds: 3),
       onResult: (result) {
-        if (!result.finalResult) return;
-
         final spokenText = result.recognizedWords.toLowerCase();
         debugPrint("heard: $spokenText");
 
-        _handleCommand(spokenText);
+        if (spokenText.contains("hey insight") ||
+            spokenText.contains("heyinsight")) {
+          _handleCommand(spokenText);
+        }
       },
     );
+
     if (!mounted) return;
 
     setState(() {
@@ -87,14 +92,11 @@ class _MenuPageState extends State<MenuPage> {
     });
   }
 
+  bool _processing = false;
   //handle voice commands
   void _handleCommand(String spokenText) {
-    //must contain wake word
-    if (!(spokenText.contains("hey insight") ||
-        spokenText.contains("heyinsight"))) {
-      _restartListening();
-      return;
-    }
+    if (_processing) return;
+
     final command = spokenText
         .replaceAll("hey insight", "")
         .replaceAll("heyinsight", "")
@@ -102,20 +104,28 @@ class _MenuPageState extends State<MenuPage> {
 
     debugPrint("COMMAND: $command");
 
+    _processing = true;
+
     //navigation
-    if (command.contains("camera")) {
+    if (command.contains("camera") ||
+        command.contains("take picture") ||
+        command.contains("photo")) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const CameraPage()),
       );
-    } else if (command.contains("chat") || command.contains("bot")) {
+    } else if (command.contains("chatbot") ||
+        command.contains("chat") ||
+        command.contains("bot")) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const ChatGeminiPage()),
       );
     }
-
-    _restartListening();
+    Future.delayed(const Duration(seconds: 2), () {
+      _processing = false;
+    });
+    //_restartListening();
   }
 
   //restart listening
