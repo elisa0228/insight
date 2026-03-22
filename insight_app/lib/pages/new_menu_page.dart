@@ -17,6 +17,16 @@ class _NewMenuPageState extends State<NewMenuPage> {
   void initState() {
     super.initState();
     flutterTts.setSpeechRate(0.45);
+
+    Future.delayed(const Duration(milliseconds: 600), () async {
+      await flutterTts.awaitSpeakCompletion(true);
+
+      await speak("Welcome to InSight,");
+      await Future.delayed(const Duration(milliseconds: 400));
+      await speak("Tap the top card to scan your environment,");
+      await Future.delayed(const Duration(milliseconds: 300));
+      await speak("Tap the bottom card to open the assistant,");
+    });
   }
 
   Future<void> speak(String text) async {
@@ -32,7 +42,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
         MaterialPageRoute(builder: (_) => const CameraPage()),
       );
     } else {
-      await speak("Opening chatbit page");
+      await speak("Opening chatbot page");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const ChatGeminiPage()),
