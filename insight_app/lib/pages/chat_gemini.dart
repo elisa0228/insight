@@ -22,7 +22,13 @@ class ChatGeminiPage extends StatefulWidget {
   //this enables automated processing of newly captured images
   final String? initialImagePath;
 
-  const ChatGeminiPage({super.key, this.initialImagePath});
+  final bool fromCamera;
+
+  const ChatGeminiPage({
+    super.key,
+    this.initialImagePath,
+    this.fromCamera = false,
+  });
 
   @override
   State<ChatGeminiPage> createState() => _ChatGeminiPageState();
@@ -388,7 +394,11 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () async {
-            await speak("navigating back to picture preview");
+            if (widget.fromCamera) {
+              await speak("Navigating back to picture preview");
+            } else {
+              await speak("Navigating back to home page");
+            }
             Navigator.pop(context);
           },
         ),

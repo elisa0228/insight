@@ -182,8 +182,10 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                          ChatGeminiPage(initialImagePath: picture.path),
+                      builder: (_) => ChatGeminiPage(
+                        initialImagePath: picture.path,
+                        fromCamera: true,
+                      ),
                     ),
                   );
                 } catch (e) {
