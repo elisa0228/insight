@@ -63,6 +63,9 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   bool _processingCommand = false; //prevent duplicate commands
   Timer? _restartTimer; //timer to restart listening automatically
 
+  Uint8List?
+  _lastImage; //stores last image so AI remembers it, in case there's a follow-up question
+
   @override
   void initState() {
     super.initState();
@@ -137,6 +140,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
         .replaceAll(RegExp(r'\*\*'), '')
         .replaceAll(RegExp(r'\*'), '')
         .replaceAll(RegExp(r'#'), '')
+        .replaceAll(RegExp(r'###'), '')
         .replaceAll(RegExp(r'_'), '')
         .replaceAll('’', "'");
     //prevents overlapping speech by explicitly stopping any current text-to-speech playback before speaking a new response, this avoids clutter or repeated audio output
@@ -273,7 +277,10 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       images; //optional list of image byte arrays for multimodal gemini input
       //if the message includes an image, load and convert it to bytes
       if (chatMessage.medias?.isNotEmpty ?? false) {
-        images = [File(chatMessage.medias!.first.url).readAsBytesSync()];
+        _lastImage = File(chatMessage.medias!.first.url).readAsBytesSync();
+        images = [_lastImage!];
+      } else if (_lastImage != null) {
+        images = [_lastImage!];
       }
 
       //initiates a streaming gemini request
