@@ -201,7 +201,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                   await Gal.putImage(picture.path);
 
                   //speak before navigation
-                  await speak("Sending picture to chatbot");
+                  await speak("Sending picture to ai assistant");
 
                   //navigates to the gemini chat screen, passing the image path as a parameter
                   //this enables automated multimodal AI analysis on screen load in the next widget
