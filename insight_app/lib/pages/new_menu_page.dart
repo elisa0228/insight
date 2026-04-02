@@ -1,5 +1,5 @@
 //this page is the home screen of my app, it's the first thing the user sees, it gives them two option - either scan environemt using the camera or open the chatbot assistant
-//tje design focuses on accessibility first, not just functionality
+//the design focuses on accessibility first, not just functionality
 
 //imports the core Flutter UI framework used to build widgets such as scaffold, text, column
 import 'package:flutter/material.dart';
