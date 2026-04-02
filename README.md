@@ -41,7 +41,7 @@ Insight creates a hands-free, accessible experience for understanding the enviro
 
 ### Project Architecture 
 
-**main.dart**\
+**main.dart**
 * Application entry point and app-level configuration
 * Initialises Gemini API
 * Loads the main navigation system
@@ -76,6 +76,11 @@ Implements the multimodal AI interaction pipeline:
 * Supports continuous voice interaction
 
 This file contains advanced streaming logic to merge partial LLM outputs into logical chat messages.
+
+**constant.dart**
+* A constant value used to authentical my app with the gemini AI service
+* Stores the gemini API key
+* The keys is used to connect the app to google's AI (gemini)
 
 **Image-to-AI Pipeline**
 1. User taps 'Scan Enviroment'
