@@ -540,7 +540,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
           onPressed: () async {
             //if page was opened from camera, speak that we are returning to picture preview
             if (widget.fromCamera) {
-              await speak("Navigating back to picture preview");
+              await speak("Navigating back to camera preview");
             } else {
               //otherwise say we are going back to home page
               await speak("Navigating back to home page");
