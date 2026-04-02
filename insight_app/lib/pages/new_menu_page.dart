@@ -53,7 +53,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
       //short pause for clarity between sentences
       await Future.delayed(const Duration(milliseconds: 300));
       //instruction for bottom half of the screen (chatbot)
-      await speak("Tap the bottom card to open the assistant,");
+      await speak("Tap the bottom card to open the AI assistant,");
     });
   }
 
@@ -294,7 +294,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Voice Assistant",
+                                    "AI Assistant",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 22,
@@ -341,7 +341,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
                           SizedBox(height: 10),
                           Text(
                             "• Tap the top card to scan your environment\n"
-                            "• Tap the bottom card to open the assistant\n"
+                            "• Tap the bottom card to open the AI assistant\n"
                             "• The app will speak actions aloud",
                             style: TextStyle(color: Colors.grey, fontSize: 14),
                           ),
