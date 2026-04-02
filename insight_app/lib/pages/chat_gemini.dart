@@ -1,17 +1,32 @@
-import 'dart:io'; //imports file handling tools so the app can open image files saved on the phone
-import 'dart:typed_data'; //imports byte array support so images can be converted into raw data for Gemini
+//the main AI interaction screen, allows the user to send text, voice or images to the gemini model, app processes the input, send it to the AI and streams the response back in real-time
+//the response is dis played on the screen and also spoken aloud using tts, making it accessible for visually impaires users, also supports continuous listening so the user can interact hands-free using voice commands
+
+//imports file handling tools so the app can open image files saved on the phone
+import 'dart:io';
+
+//imports byte array support so images can be converted into raw data for Gemini
+import 'dart:typed_data';
+
 //imported asynchronous timing support to manage automatical speech recognition restart behaviour, this enables timer-based recovery when listening stops, forming the basis of the continuous listening pipeline
 import 'dart:async'; //required to support continuous listening restart timer after short delays
 
 //retained multimodal chat dependencies to support text, image and AI-assisted conversational interaction, these imports provide the surrounding infrastructure required for integrating voice features into the existing chat workflow
 import 'package:dash_chat_2/dash_chat_2.dart'; //provides a full-features chat UI framework including message bubbles, input areas and message layout
-import 'package:flutter/material.dart'; //core flutter UI framework for building cross-platform widgets, building screens, buttons, layouts, texts and icons
-import 'package:flutter_gemini/flutter_gemini.dart'; //imports the gemini package so the app can send questions and images to Google's AI model
-import 'package:image_picker/image_picker.dart'; //enables secure access to the device photo gallery, imports the allery picker so the user can choose an image from their device
+
+//core flutter UI framework for building cross-platform widgets, building screens, buttons, layouts, texts and icons
+import 'package:flutter/material.dart';
+
+//imports the gemini package so the app can send questions and images to Google's AI model
+import 'package:flutter_gemini/flutter_gemini.dart';
+
+//enables secure access to the device photo gallery, imports the allery picker so the user can choose an image from their device
+import 'package:image_picker/image_picker.dart';
+
 //imported tts and speech recognition pakacge to support bidirectional voice interaction
 import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
-import 'package:speech_to_text/speech_to_text.dart'
-    as stt; //convert spoken user input into text using the device's speech recognition engine
+
+//convert spoken user input into text using the device's speech recognition engine
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 //ChatGeminiPage represents the primary conversational AI interface
 //it supports multimodal interaction by allowing users to submit both text and images
