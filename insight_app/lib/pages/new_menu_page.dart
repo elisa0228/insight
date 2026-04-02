@@ -75,7 +75,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
     //if the users taps the top card, the app speaks and then opens the camera page
     if (screen == "camera") {
       //informs the user that navigation is happening
-      await speak("Opening photo preview page");
+      await speak("Opening camera preview page");
       //navigates to the camera page using flutters navigator
       Navigator.push(
         context,
@@ -84,7 +84,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
       //if they tap the bottom card, it opens the chatbot instead
     } else {
       //informs the user that the chatbot is opening
-      await speak("Opening chatbot page");
+      await speak("Opening AI assistant page");
       //navigates to the chatbot page
       Navigator.push(
         context,
