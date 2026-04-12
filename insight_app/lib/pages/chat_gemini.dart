@@ -103,6 +103,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
 
   //stores the last image that was send to gemini
   //this is the important memory feature, stores last image so AI remembers it therefore lets the AI answer follow-up questions about the same picture
+  //specialised, memory-efficient type used in Dart and Flutter for handling binary data, such as images, file uploads, or network packets. It is more efficient than a standard
   Uint8List? _lastImage;
 
   //this function runs once when the page is first openeds
