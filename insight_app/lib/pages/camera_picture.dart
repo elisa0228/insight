@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 //imports the gallery plugin to save images to the device gallery
 import 'package:gal/gal.dart';
 
-//imports the chatbot page so we can navigate to it after taking a picture
+//imports the ai assistant page so we can navigate to it after taking a picture
 import 'chat_gemini.dart';
 
 //imports text-to-speech so the app can talk to the user

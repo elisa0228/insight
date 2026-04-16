@@ -34,12 +34,12 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 //it is stateful because the screen changes over time when messages are sent, AI replied arrive and speech starts/stops
 class ChatGeminiPage extends StatefulWidget {
   //this stores the path of an image if the user arrived here from the camera page
-  //it is optional because sometimes the user opens the chatbot directly with no image
+  //it is optional because sometimes the user opens the ai assistant directly with no image
   //this enables automated processing of newly captured images
   //the app does not require an image every time
   final String? initialImagePath;
 
-  //this tells the app whether the chatbot page was opened from the camera page
+  //this tells the app whether the ai assistant page was opened from the camera page
   //this is useful for deciding what the back button should say out loud
   final bool fromCamera;
 
@@ -58,7 +58,7 @@ class ChatGeminiPage extends StatefulWidget {
   State<ChatGeminiPage> createState() => _ChatGeminiPageState();
 }
 
-//this class stores all the logic, variables and UI updates for the chatbot page
+//this class stores all the logic, variables and UI updates for the ai assistant page
 class _ChatGeminiPageState extends State<ChatGeminiPage> {
   final Gemini gemini = Gemini
       .instance; //creates a gemini instance so this page can send requests to the AI model
@@ -529,7 +529,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
     super.dispose(); //call parent dispose
   }
 
-  //builds the main screen layout for the chatbot page
+  //builds the main screen layout for the ai assistant page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -549,7 +549,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
             Navigator.pop(context); //go back to previous page
           },
         ),
-        title: const Text('Chat Gemini'), //page title shown in app bar
+        title: const Text('AI Assistant'), //page title shown in app bar
         centerTitle: true, //keep title centred
       ),
       //main body of the screen is the chat UI

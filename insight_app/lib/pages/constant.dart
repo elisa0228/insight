@@ -3,4 +3,4 @@
 //the keys is used to connect the app to google's AI (gemini)
 
 //const means the value NEVER changes while the app runs
-const String GEMINI_API_KEY = "";
+const String GEMINI_API_KEY = "REMOVED";

@@ -1,4 +1,4 @@
-//this page is the home screen of my app, it's the first thing the user sees, it gives them two option - either scan environemt using the camera or open the chatbot assistant
+//this page is the home screen of my app, it's the first thing the user sees, it gives them two option - either scan environemt using the camera or open the ai assistant assistant
 //the design focuses on accessibility first, not just functionality
 
 //imports the core Flutter UI framework used to build widgets such as scaffold, text, column
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 //imports the camera screen where users can capture images
 import 'camera_picture.dart';
-//imports the Gemini chatbot screen for AI interaction
+//imports the ai assistant screen for AI interaction
 import 'chat_gemini.dart';
 
 //this is a the main menu page of the application
@@ -52,7 +52,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
       await speak("Tap the top card to scan your environment,");
       //short pause for clarity between sentences
       await Future.delayed(const Duration(milliseconds: 300));
-      //instruction for bottom half of the screen (chatbot)
+      //instruction for bottom half of the screen (ai assistant)
       await speak("Tap the bottom card to open the AI assistant,");
     });
   }
@@ -81,11 +81,11 @@ class _NewMenuPageState extends State<NewMenuPage> {
         context,
         MaterialPageRoute(builder: (_) => const CameraPage()),
       );
-      //if they tap the bottom card, it opens the chatbot instead
+      //if they tap the bottom card, it opens the ai assistant instead
     } else {
-      //informs the user that the chatbot is opening
+      //informs the user that the ai assistant is opening
       await speak("Opening AI assistant page");
-      //navigates to the chatbot page
+      //navigates to the ai assistant page
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const ChatGeminiPage()),
@@ -153,7 +153,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
             ),
 
             //main card section (interactive buttons)
-            //the top half of the screen is for scanning the environment and the bottom half is for the chatbot
+            //the top half of the screen is for scanning the environment and the bottom half is for the ai assistant
             //the screen screen is split into two large buttons so its easy to tap anywhere
             //big buttons (cards) are used to make tapping easier and reduce precision required
             Expanded(
@@ -240,11 +240,11 @@ class _NewMenuPageState extends State<NewMenuPage> {
                       ),
                     ),
 
-                    //chatbot card (bottom half of screen)
+                    //ai assistant card (bottom half of screen)
                     //this opens the assistant where the users can ask questions using voice or text
                     Expanded(
                       child: GestureDetector(
-                        //triggers chatbot navigation
+                        //triggers ai assistant navigation
                         onTap: () => _navigate("chat"),
                         child: Container(
                           width: double.infinity,
