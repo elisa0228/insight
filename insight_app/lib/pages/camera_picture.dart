@@ -1,9 +1,9 @@
-//this pages opens the camera, lets the user take a picture, saves it, then sends it to the AI chatbot while speaking feedback
+//this page opens the camera, lets the user take a picture, saves it, then sends it to the AI chatbot while speaking feedback
 
 //imports the flutter camera plugin for accessing the device camera
 import 'package:camera/camera.dart';
 
-//imports core flutter matieral UI components (buttons, layouts, etc)
+//imports core flutter material UI components (buttons, layouts, etc)
 import 'package:flutter/material.dart';
 
 //imports the gallery plugin to save images to the device gallery

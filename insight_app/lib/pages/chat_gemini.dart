@@ -1,5 +1,5 @@
 //the main AI interaction screen, allows the user to send text, voice or images to the gemini model, app processes the input, send it to the AI and streams the response back in real-time
-//the response is dis played on the screen and also spoken aloud using tts, making it accessible for visually impaires users, also supports continuous listening so the user can interact hands-free using voice commands
+//the response is displayed on the screen and also spoken aloud using tts, making it accessible for visually impaired users, also supports continuous listening so the user can interact hands-free using voice commands
 
 //imports file handling tools so the app can open image files saved on the phone
 import 'dart:io';
@@ -7,7 +7,7 @@ import 'dart:io';
 //imports byte array support so images can be converted into raw data for Gemini
 import 'dart:typed_data';
 
-//imported asynchronous timing support to manage automatical speech recognition restart behaviour, this enables timer-based recovery when listening stops, forming the basis of the continuous listening pipeline
+//imported asynchronous timing support to manage automatic speech recognition restart behaviour, this enables timer-based recovery when listening stops, forming the basis of the continuous listening pipeline
 import 'dart:async'; //required to support continuous listening restart timer after short delays
 
 //retained multimodal chat dependencies to support text, image and AI-assisted conversational interaction, these imports provide the surrounding infrastructure required for integrating voice features into the existing chat workflow
@@ -19,10 +19,10 @@ import 'package:flutter/material.dart';
 //imports the gemini package so the app can send questions and images to Google's AI model
 import 'package:flutter_gemini/flutter_gemini.dart';
 
-//enables secure access to the device photo gallery, imports the allery picker so the user can choose an image from their device
+//enables secure access to the device photo gallery, imports the gallery picker so the user can choose an image from their device
 import 'package:image_picker/image_picker.dart';
 
-//imported tts and speech recognition pakacge to support bidirectional voice interaction
+//imported tts and speech recognition package to support bidirectional voice interaction
 import 'package:flutter_tts/flutter_tts.dart'; //convert text output into spoken audio using the device's built-in text-to-speech engine
 
 //convert spoken user input into text using the device's speech recognition engine
@@ -106,7 +106,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   //specialised, memory-efficient type used in Dart and Flutter for handling binary data, such as images, file uploads, or network packets. It is more efficient than a standard
   Uint8List? _lastImage;
 
-  //this function runs once when the page is first openeds
+  //this function runs once when the page is first opened
   //it is used to initialise text-to-speech, speech-to-text and send the image automatically if one was passed in
   @override
   void initState() {
@@ -141,7 +141,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   }
 
   //this function sets up how text-to-speech should behave
-  //it controls the voice settings and what should happen whens speech starts or ends
+  //it controls the voice settings and what should happen when speech starts or ends
   void _setupTts() {
     flutterTts.awaitSpeakCompletion(
       true,
@@ -158,9 +158,9 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       if (!mounted)
         return; //make sure the widget still exists before changing state
       setState(() {
-        _isSpeaking = true; //records that the app is crrently speaking
+        _isSpeaking = true; //records that the app is currently speaking
       });
-      _stopListening(); //stops the microphone so the app doesn not hear its own voice
+      _stopListening(); //stops the microphone so the app does not hear its own voice
     });
 
     //restart listening after gemini speaks
@@ -397,8 +397,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
       }
 
       //initiates a streaming gemini request
-      //this allows partial responses to be displayed in real-time, improving receieved responsiveness and user experience
-      //sends the message and optional image to gemini as a streming request
+      //this allows partial responses to be displayed in real-time, improving received responsiveness and user experience
+      //sends the message and optional image to gemini as a streaming request
       gemini
           .streamGenerateContent(question, images: images)
           .listen(
@@ -417,7 +417,8 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
                       if (response.isNotEmpty &&
                           !response.endsWith(' ') &&
                           !text.startsWith(' ')) {
-                        response += ' '; //adds a space if needed for readbility
+                        response +=
+                            ' '; //adds a space if needed for readability
                       }
                       response += text; //appends the current text chunk
                     }
@@ -499,7 +500,7 @@ class _ChatGeminiPageState extends State<ChatGeminiPage> {
   void _sendImageMessage() {
     ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
       if (image != null) {
-        //creates a new image-based chat message using the same assistie prompt
+        //creates a new image-based chat message using the same assistive prompt
         final chatMessage = ChatMessage(
           text:
               "You are an assistive AI for a visually impaired user. Describe the scene focusing on obstacles, distances and navigation. For example: 'A chair is two metres ahead, a table is to your left'",

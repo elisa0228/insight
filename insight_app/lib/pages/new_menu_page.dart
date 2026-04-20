@@ -1,4 +1,4 @@
-//this page is the home screen of my app, it's the first thing the user sees, it gives them two option - either scan environemt using the camera or open the ai assistant assistant
+//this page is the home screen of my app, it's the first thing the user sees, it gives them two option - either scan environment using the camera or open the ai assistant
 //the design focuses on accessibility first, not just functionality
 
 //imports the core Flutter UI framework used to build widgets such as scaffold, text, column
@@ -154,7 +154,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
 
             //main card section (interactive buttons)
             //the top half of the screen is for scanning the environment and the bottom half is for the ai assistant
-            //the screen screen is split into two large buttons so its easy to tap anywhere
+            //the screen is split into two large buttons so its easy to tap anywhere
             //big buttons (cards) are used to make tapping easier and reduce precision required
             Expanded(
               child: Padding(
@@ -317,8 +317,8 @@ class _NewMenuPageState extends State<NewMenuPage> {
                       ),
                     ),
 
-                    //intructions card (extra guidance ofr users and helpers)
-                    //added a small instruction section for extra guidanc for helpers, but the main guidance is spoken out loud
+                    //instructions card (extra guidance for users and helpers)
+                    //added a small instruction section for extra guidance for helpers, but the main guidance is spoken out loud
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
