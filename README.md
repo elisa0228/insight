@@ -24,6 +24,18 @@ The architecture emphasises modularity, privacy-aware data handling and responsi
 Insight creates a hands-free, accessible experience for understanding the environment.
 
 
+### User Interface
+| <img src="insight_app/readme%20pictures/home%20screen.png" width="220"/> | <img src="insight_app/readme%20pictures/camera%20preview.png" width="220"/> | <img src="insight_app/readme%20pictures/gallery.png" width="220"/> | <img src="insight_app/readme%20pictures/gallery%20collection.png" width="220"/> |
+|:--:|:--:|:--:|:--:|
+| *Home Screen* | *Camera Preview* | *Gallery View* | *Gallery Collection* |
+
+<br>
+
+| <img src="insight_app/readme%20pictures/AI%20screen.png" width="220"/> | <img src="insight_app/readme%20pictures/AI%20output%20part%20one.png" width="220"/> | <img src="insight_app/readme%20pictures/AI%20output%20part%20two.png" width="220"/> |
+|:--:|:--:|:--:|
+| *AI Assistant Interface* | *AI Output (Part 1)* | *AI Output (Part 2)* |
+
+
 ### Key Features:
 * Real-time camera capture using native device hardware
 * Secure local image storage via device gallery
